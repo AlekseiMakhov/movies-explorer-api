@@ -1,2 +1,2 @@
-# movies-explorer-ap
+# movies-explorer-api
 diploma project backend
