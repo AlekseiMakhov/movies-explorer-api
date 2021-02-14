@@ -34,6 +34,16 @@ const movieSchema = new mongoose.Schema({
     },
     required: true,
   },
+  thumbnail: {
+    type: String,
+    validate: {
+      validator(v) {
+        return validator.isURL(v);
+      },
+      message: 'Некорректный URL',
+    },
+    required: true,
+  },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
