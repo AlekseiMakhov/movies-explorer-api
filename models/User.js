@@ -25,20 +25,6 @@ const userSchema = new mongoose.Schema({
     minlength: 2,
     maxlength: 30,
   },
-  about: {
-    type: String,
-    minlength: 2,
-    maxlength: 30,
-  },
-  avatar: {
-    type: String,
-    validate: {
-      validator(v) {
-        return validator.isURL(v);
-      },
-      message: 'Некорректный URL',
-    },
-  },
 });
 
 userSchema.statics.findUserByCredentials = function (email, password) {

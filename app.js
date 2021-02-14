@@ -4,7 +4,7 @@ const { connect } = require('mongoose');
 const cors = require('cors');
 const { errors } = require('celebrate');
 const userRouter = require('./routes/users.js');
-const cardsRouter = require('./routes/cards');
+const moviesRouter = require('./routes/movies');
 const auth = require('./middlewares/auth');
 const { login, createUser } = require('./controllers/users.js');
 const NotFoundError = require('./errorTypes/NotFoundError.js');
@@ -24,18 +24,12 @@ connect('mongodb://localhost:27017/mestodb', {
 app.use(cors());
 app.use(express.json());
 
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
-
 app.use(requestLogger);
 
 app.post('/signin', authorizeValidator, login);
 app.post('/signup', userValidator, createUser);
 app.use('/', auth, userRouter);
-app.use('/', auth, cardsRouter);
+app.use('/', auth, moviesRouter);
 
 // Обработка запроса несуществующего адреса
 app.all('*', (req, res, next) => next(new NotFoundError('Ресурс не найден')));

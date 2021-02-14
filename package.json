@@ -1,7 +1,7 @@
 {
-  "name": "express-mesto",
+  "name": "movies explorer",
   "version": "1.0.0",
-  "description": "experimental server for mesto project",
+  "description": "api for movies explorer project",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
