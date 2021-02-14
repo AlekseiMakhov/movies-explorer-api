@@ -1,5 +1,5 @@
 {
-  "name": "movies explorer",
+  "name": "movies explorer api",
   "version": "1.0.0",
   "description": "api for movies explorer project",
   "main": "app.js",
