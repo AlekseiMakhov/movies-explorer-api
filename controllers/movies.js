@@ -21,7 +21,7 @@ module.exports.addMovie = (req, res, next) => {
 };
 
 // запрос всех добавленных фильмов
-module.exports.getCards = (req, res, next) => Movie.find({})
+module.exports.getMovies = (req, res, next) => Movie.find({})
   .then((movie) => res.send(movie))
   .catch((err) => {
     if (err.name === 'CastError') {
@@ -31,7 +31,7 @@ module.exports.getCards = (req, res, next) => Movie.find({})
   });
 
 // удаление фильма из сохраненных
-module.exports.deleteCard = (req, res, next) => {
+module.exports.deleteMovie = (req, res, next) => {
   const owner = req.user._id;
   Movie.findById(req.params.movieId)
     .then((movie) => {
