@@ -13,8 +13,9 @@ const { authorizeValidator, userValidator } = require('./middlewares/dataValidat
 
 const app = express();
 const { PORT = 3000 } = process.env;
+const { MONGO_DB = 'mongodb://localhost:27017/mestodb' } = process.env;
 
-connect('mongodb://localhost:27017/mestodb', {
+connect(MONGO_DB, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
   useCreateIndex: true,

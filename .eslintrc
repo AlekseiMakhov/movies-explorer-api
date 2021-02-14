@@ -2,7 +2,5 @@
     "extends": "airbnb-base",
     "rules": {
         "no-underscore-dangle": ["off", "_id" ],
-        "consistent-return": ["off", { "treatUndefinedAsUnspecified": false }],
-        "func-names": ["off", "as-needed"]
     }
 }
