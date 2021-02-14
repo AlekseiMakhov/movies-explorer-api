@@ -1,2 +1,25 @@
-# movies-explorer-api
-diploma project backend
+# Backend проекта "Место"
+
+### Функции сервера:
+
+* Создание нового пользователя с полями _name_, _about_, _avatar_ запросом POST по адресу '/users'
+* Редактирование пользователя запросом PATCH по адресу '/users/me'
+* Редактирование аватара пользователя запросом PATCH по адресу '/users/me/avatar'
+* Запрос списка пользователя командой GET по адресу '/users'
+* Запрос пользователя по id командой GET по адресу '/users/:userId'
+
+* Добавление новой карточки командой POST по адресу '/cards'
+* Запрос списка карточек командой GET по адресу '/cards'
+* Удаление карточки по id командой DELETE по адресу '/cards/:cardId'
+* Установка пользователем лайка командой PUT по адресу '/cards/:cardId/likes'
+* Снятие пользователем лайка командой DELETE по адресу '/cards/:cardId/likes'
+
+### Технологии:
+
+* Git
+* Webpack
+* npm
+* node.js
+* express routing
+* mongoDB
+* mongoose
