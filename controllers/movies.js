@@ -1,17 +1,16 @@
 const BadRequestError = require('../errorTypes/BadRequestError');
 const ForbiddenError = require('../errorTypes/ForbiddenError');
 const NotFoundError = require('../errorTypes/NotFoundError');
-const Card = require('../models/Card');
+const Movie = require('../models/Movie');
 
-// создание карточки
-module.exports.createCard = (req, res, next) => {
-  const { name, link } = req.body;
-  Card.create({ name, link, owner: req.user._id })
-    .then((card) => {
-      if (!card) {
+// добавление фильма
+module.exports.addMovie = (req, res, next) => {
+  Movie.create({ owner: req.user._id, ...req.body })
+    .then((movie) => {
+      if (!movie) {
         throw new BadRequestError('Переданы некорректные данные');
       }
-      return res.send(card);
+      return res.send(movie);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -21,9 +20,9 @@ module.exports.createCard = (req, res, next) => {
     });
 };
 
-// запрос всех карточек
-module.exports.getCards = (req, res, next) => Card.find({})
-  .then((card) => res.send(card))
+// запрос всех добавленных фильмов
+module.exports.getCards = (req, res, next) => Movie.find({})
+  .then((movie) => res.send(movie))
   .catch((err) => {
     if (err.name === 'CastError') {
       throw new BadRequestError('Запрос некорректен');
@@ -31,59 +30,22 @@ module.exports.getCards = (req, res, next) => Card.find({})
     next(err);
   });
 
-// удаление карточки
+// удаление фильма из сохраненных
 module.exports.deleteCard = (req, res, next) => {
   const owner = req.user._id;
-  Card.findById(req.params.id)
-    .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Такой карточки нет в базе');
+  Movie.findById(req.params.id)
+    .then((movie) => {
+      if (!movie) {
+        throw new NotFoundError('Такого фильма нет в базе');
       }
-      return card;
+      return movie;
     })
-    .then((card) => {
-      if (String(card.owner) !== owner) {
+    .then((movie) => {
+      if (String(movie.owner) !== owner) {
         throw new ForbiddenError('Недостаточно прав');
       }
-      return Card.findByIdAndRemove(req.params.id);
+      return Movie.findByIdAndRemove(req.params.id);
     })
-    .then((card) => res.send(card))
+    .then((movie) => res.send(movie))
     .catch(next);
 };
-// лайк
-module.exports.likeCard = (req, res, next) => Card.findByIdAndUpdate(
-  req.params.id,
-  { $addToSet: { likes: req.user._id } },
-  { new: true },
-)
-  .then((card) => {
-    if (!card) {
-      throw new NotFoundError('Такой карточки нет в базе');
-    }
-    return res.send(card);
-  })
-  .catch((err) => {
-    if (err.name === 'CastError') {
-      next(new BadRequestError('Запрос некорректен'));
-    }
-    next(err);
-  });
-
-// дизлайк
-module.exports.dislikeCard = (req, res, next) => Card.findByIdAndUpdate(
-  req.params.id,
-  { $pull: { likes: req.user._id } },
-  { new: true },
-)
-  .then((card) => {
-    if (!card) {
-      throw new NotFoundError('Такой карточки нет в базе');
-    }
-    return res.send(card);
-  })
-  .catch((err) => {
-    if (err.name === 'CastError') {
-      next(new BadRequestError('Запрос некорректен'));
-    }
-    next(err);
-  });
