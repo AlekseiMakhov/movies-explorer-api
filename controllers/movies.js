@@ -33,7 +33,7 @@ module.exports.getCards = (req, res, next) => Movie.find({})
 // удаление фильма из сохраненных
 module.exports.deleteCard = (req, res, next) => {
   const owner = req.user._id;
-  Movie.findById(req.params.id)
+  Movie.findById(req.params.movieId)
     .then((movie) => {
       if (!movie) {
         throw new NotFoundError('Такого фильма нет в базе');
@@ -44,7 +44,7 @@ module.exports.deleteCard = (req, res, next) => {
       if (String(movie.owner) !== owner) {
         throw new ForbiddenError('Недостаточно прав');
       }
-      return Movie.findByIdAndRemove(req.params.id);
+      return Movie.findByIdAndRemove(req.params.movieId);
     })
     .then((movie) => res.send(movie))
     .catch(next);
