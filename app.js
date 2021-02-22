@@ -14,7 +14,7 @@ const { errorLogger, requestLogger } = require('./middlewares/logger');
 const { authorizeValidator, userValidator } = require('./middlewares/dataValidator');
 const {
   PORT, MONGO_URL, MONGO_CFG, LIMITER_CFG,
-} = require('./config');
+} = require('./configs/constants');
 
 const app = express();
 
@@ -22,11 +22,9 @@ app.use(cors());
 connect(MONGO_URL, MONGO_CFG);
 
 app.use(express.json());
-
 app.use(requestLogger);
-
 app.use(helmet());
-// app.use(limiter(LIMITER_CFG));
+app.use(limiter(LIMITER_CFG));
 
 app.post('/signin', authorizeValidator, login);
 app.post('/signup', userValidator, createUser);

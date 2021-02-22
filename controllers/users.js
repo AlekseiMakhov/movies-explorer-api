@@ -5,11 +5,13 @@ const NotFoundError = require('../errorTypes/NotFoundError');
 const BadRequestError = require('../errorTypes/BadRequestError');
 const ConflictRequestError = require('../errorTypes/ConflictRequestError');
 const AuthorizationError = require('../errorTypes/AuthorizationError');
-const { JWT_SECRET } = require('../config');
+const { JWT_SECRET } = require('../configs/constants');
+const {
+  userConflictErrorText, badRequestErrorText, userNotFoundErrorText, loginErrorText,
+} = require('../configs/errorTexts');
 
 // добавление пользователя
 module.exports.createUser = (req, res, next) => {
-  console.log(req.body);
   const {
     email,
     password,
@@ -18,7 +20,7 @@ module.exports.createUser = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if (user) {
-        throw new ConflictRequestError(`Пользователь ${email} уже зарегистрирован`);
+        throw new ConflictRequestError(userConflictErrorText);
       }
       return bcrypt.hash(password, 10)
         .then((hash) => User.create({
@@ -32,7 +34,7 @@ module.exports.createUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные'));
+        next(new BadRequestError(badRequestErrorText));
       }
       next(err);
     });
@@ -48,7 +50,7 @@ module.exports.login = (req, res, next) => {
       res.send({ data: token });
     })
     .catch(() => {
-      next(new AuthorizationError('Неверные имя пользователя или пароль'));
+      next(new AuthorizationError(loginErrorText));
     });
 };
 
@@ -56,13 +58,13 @@ module.exports.login = (req, res, next) => {
 module.exports.getCurrentUser = (req, res, next) => User.findById(req.user._id)
   .then((user) => {
     if (!user) {
-      throw new NotFoundError('Пользователь не найден');
+      throw new NotFoundError(userNotFoundErrorText);
     }
     return res.send(user);
   })
   .catch((err) => {
     if (err.name === 'CastError') {
-      next(new BadRequestError('Переданы некорректные данные'));
+      next(new BadRequestError(badRequestErrorText));
     }
     next(err);
   });
@@ -73,13 +75,13 @@ module.exports.updateUser = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, { name, email }, { new: true })
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь не найден');
+        throw new NotFoundError(userNotFoundErrorText);
       }
       return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные'));
+        next(new BadRequestError(badRequestErrorText));
       }
       next(err);
     });
