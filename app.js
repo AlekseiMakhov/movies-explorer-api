@@ -1,36 +1,41 @@
-require('dotenv').config();
+// require('dotenv').config();
 const express = require('express');
 const { connect } = require('mongoose');
 const limiter = require('express-rate-limit');
 const cors = require('cors');
 const helmet = require('helmet');
+const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
-const userRouter = require('./routes/users.js');
+const userRouter = require('./routes/users');
 const moviesRouter = require('./routes/movies');
 const auth = require('./middlewares/auth');
-const { login, createUser } = require('./controllers/users.js');
-const NotFoundError = require('./errorTypes/NotFoundError.js');
-const { errorLogger, requestLogger } = require('./middlewares/logger.js');
-const { authorizeValidator, userValidator } = require('./middlewares/dataValidator.js');
+const { login, createUser } = require('./controllers/users');
+const NotFoundError = require('./errorTypes/NotFoundError');
+const { errorLogger, requestLogger } = require('./middlewares/logger');
+const { authorizeValidator, userValidator } = require('./middlewares/dataValidator');
 const {
   PORT, MONGO_URL, MONGO_CFG, LIMITER_CFG,
 } = require('./config');
 
 const app = express();
 
+app.use(cors());
 connect(MONGO_URL, MONGO_CFG);
 
-// const limiter = RateLimiter(150, 'hour');
-
-app.use(cors());
 app.use(express.json());
 
 app.use(requestLogger);
 
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(helmet());
+app.use(limiter(LIMITER_CFG));
+
 app.post('/signin', authorizeValidator, login);
 app.post('/signup', userValidator, createUser);
-app.use('/', auth, userRouter);
-app.use('/', moviesRouter);
+app.use('/users', auth, userRouter);
+app.use('/movies', auth, moviesRouter);
 
 // Обработка запроса несуществующего адреса
 app.all('*', (req, res, next) => next(new NotFoundError('Ресурс не найден')));
@@ -49,8 +54,5 @@ app.use((err, req, res, next) => {
     });
   next();
 });
-
-app.use(helmet());
-app.use(limiter(LIMITER_CFG));
 
 app.listen(PORT);
