@@ -1,6 +1,7 @@
-require('dotenv').config();
+// require('dotenv').config();
 const express = require('express');
 const { connect } = require('mongoose');
+const { RateLimiter } = require('limiter').RateLimiter;
 const cors = require('cors');
 const { errors } = require('celebrate');
 const userRouter = require('./routes/users.js');
@@ -13,24 +14,27 @@ const { authorizeValidator, userValidator } = require('./middlewares/dataValidat
 
 const app = express();
 const { PORT = 3000 } = process.env;
-const { MONGO_DB = 'mongodb://localhost:27017/mestodb' } = process.env;
+// const { MONGO_DB = 'mongodb://localhost:27017/moviesdb' } = process.env;
 
-connect(MONGO_DB, {
+connect('mongodb://localhost:27017/moviesdb', {
   useUnifiedTopology: true,
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
 });
 
+const limiter = new RateLimiter(150, 'hour');
+
 app.use(cors());
 app.use(express.json());
 
 app.use(requestLogger);
+app.use(limiter);
 
 app.post('/signin', authorizeValidator, login);
 app.post('/signup', userValidator, createUser);
 app.use('/', auth, userRouter);
-app.use('/', auth, moviesRouter);
+app.use('/', moviesRouter);
 
 // Обработка запроса несуществующего адреса
 app.all('*', (req, res, next) => next(new NotFoundError('Ресурс не найден')));

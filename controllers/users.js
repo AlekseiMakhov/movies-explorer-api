@@ -10,6 +10,7 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 
 // добавление пользователя
 module.exports.createUser = (req, res, next) => {
+  console.log(req.body);
   const {
     email,
     password,
