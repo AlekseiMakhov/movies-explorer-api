@@ -1,4 +1,4 @@
-// require('dotenv').config();
+require('dotenv').config();
 const express = require('express');
 const { connect } = require('mongoose');
 const { RateLimiter } = require('limiter').RateLimiter;
@@ -11,12 +11,11 @@ const { login, createUser } = require('./controllers/users.js');
 const NotFoundError = require('./errorTypes/NotFoundError.js');
 const { errorLogger, requestLogger } = require('./middlewares/logger.js');
 const { authorizeValidator, userValidator } = require('./middlewares/dataValidator.js');
+const { PORT, MONGO_URL } = require('./config');
 
 const app = express();
-const { PORT = 3000 } = process.env;
-// const { MONGO_DB = 'mongodb://localhost:27017/moviesdb' } = process.env;
 
-connect('mongodb://localhost:27017/moviesdb', {
+connect(MONGO_URL, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
   useCreateIndex: true,
