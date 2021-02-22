@@ -4,7 +4,6 @@ const { connect } = require('mongoose');
 const limiter = require('express-rate-limit');
 const cors = require('cors');
 const helmet = require('helmet');
-const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const userRouter = require('./routes/users');
 const moviesRouter = require('./routes/movies');
@@ -26,11 +25,8 @@ app.use(express.json());
 
 app.use(requestLogger);
 
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(helmet());
-app.use(limiter(LIMITER_CFG));
+// app.use(limiter(LIMITER_CFG));
 
 app.post('/signin', authorizeValidator, login);
 app.post('/signup', userValidator, createUser);
