@@ -49,13 +49,13 @@ module.exports.userValidator = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(passwordValidator),
-    name: Joi.string(),
+    name: Joi.string().min(2).max(30).required(),
   }),
 });
 
 module.exports.userUpdateValidator = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).required().max(30),
+    name: Joi.string().min(2).max(30).required(),
     email: Joi.string().email().required(),
   }),
 });
