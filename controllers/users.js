@@ -5,8 +5,7 @@ const NotFoundError = require('../errorTypes/NotFoundError');
 const BadRequestError = require('../errorTypes/BadRequestError');
 const ConflictRequestError = require('../errorTypes/ConflictRequestError');
 const AuthorizationError = require('../errorTypes/AuthorizationError');
-
-const { NODE_ENV, JWT_SECRET } = process.env;
+const { JWT_SECRET } = require('../config');
 
 // добавление пользователя
 module.exports.createUser = (req, res, next) => {
@@ -44,12 +43,7 @@ module.exports.login = (req, res, next) => {
   User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign(
-        { _id: user._id },
-        NODE_ENV === 'production'
-          ? JWT_SECRET
-          : 'dev-secret',
-        { expiresIn: '7d' },
-      );
+        { _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
       res.send({ data: token });
     })
     .catch(() => {
