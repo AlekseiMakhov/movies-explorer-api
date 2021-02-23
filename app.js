@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const { connect } = require('mongoose');
 const limiter = require('express-rate-limit');
@@ -7,7 +6,7 @@ const helmet = require('helmet');
 const { errors } = require('celebrate');
 const { errorLogger, requestLogger } = require('./middlewares/logger');
 const {
-  PORT, MONGO_URL, MONGO_CFG, LIMITER_CFG,
+  PORT, MONGODB_URI, MONGO_CFG, LIMITER_CFG,
 } = require('./configs/constants');
 const errorHandler = require('./middlewares/errorHandler');
 const router = require('./routes/index');
@@ -15,7 +14,7 @@ const router = require('./routes/index');
 const app = express();
 
 app.use(cors());
-connect(MONGO_URL, MONGO_CFG);
+connect(MONGODB_URI, MONGO_CFG);
 
 app.use(express.json());
 app.use(requestLogger);

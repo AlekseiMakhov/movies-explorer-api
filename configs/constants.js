@@ -1,7 +1,9 @@
+require('dotenv').config();
+
 const { PORT = 3000 } = process.env;
 const { NODE_ENV } = process.env;
-const MONGO_URL = NODE_ENV !== 'production' ? 'mongodb://localhost:27017/moviesdb' : process.env;
-const JWT_SECRET = NODE_ENV !== 'production' ? 'dev-secret' : process.env;
+const { MONGODB_URI } = NODE_ENV !== 'production' ? 'mongodb://localhost:27017/moviesdb' : process.env;
+const { JWT_SECRET } = NODE_ENV !== 'production' ? 'dev-secret' : process.env;
 
 const MONGO_CFG = {
   useUnifiedTopology: true,
@@ -17,5 +19,5 @@ const LIMITER_CFG = {
 };
 
 module.exports = {
-  PORT, MONGO_URL, JWT_SECRET, MONGO_CFG, LIMITER_CFG,
+  PORT, MONGODB_URI, JWT_SECRET, MONGO_CFG, LIMITER_CFG,
 };
