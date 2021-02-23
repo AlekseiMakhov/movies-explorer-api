@@ -10,6 +10,7 @@ const badRequestErrorText = 'Введены некорректные данны�
 const badURLErrorText = 'Некорректный URL';
 const badPasswordErrorText = 'Некорректный пароль';
 const badEmailErrorText = 'Некорректный email';
+const tooManyReqErrorText = 'Превышено количество запросов';
 
 module.exports = {
   forbiddenErrorText,
@@ -24,4 +25,5 @@ module.exports = {
   badURLErrorText,
   badPasswordErrorText,
   badEmailErrorText,
+  tooManyReqErrorText,
 };

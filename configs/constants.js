@@ -1,3 +1,5 @@
+const { tooManyReqErrorText } = require('./errorTexts');
+
 require('dotenv').config();
 
 const { PORT = 3000 } = process.env;
@@ -15,7 +17,7 @@ const MONGO_CFG = {
 const LIMITER_CFG = {
   windowMs: 60 * 60 * 1000,
   max: 1000,
-  message: 'Превышено количество запросов',
+  message: tooManyReqErrorText,
 };
 
 module.exports = {

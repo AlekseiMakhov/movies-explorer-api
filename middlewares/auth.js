@@ -7,7 +7,7 @@ module.exports = function (req, res, next) {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    throw new AuthorizationError({ message: authorizeErrorText });
+    throw new AuthorizationError(authorizeErrorText);
   }
   const token = authorization.replace('Bearer ', '');
   let payload;
@@ -15,8 +15,8 @@ module.exports = function (req, res, next) {
   try {
     payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
-    next(new AuthorizationError({ message: authorizeErrorText }));
+    next(new AuthorizationError(authorizeErrorText));
   }
-  req.user = payload; // записываем пейлоуд в объект запроса
-  return next(); // пропускаем запрос дальше
+  req.user = payload;
+  return next();
 };
