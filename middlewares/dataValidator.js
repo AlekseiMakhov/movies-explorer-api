@@ -1,16 +1,17 @@
 const { celebrate, Joi, CelebrateError } = require('celebrate');
 const validator = require('validator');
+const { badPasswordErrorText, badURLErrorText } = require('../configs/errorTexts');
 
 const urlValidator = (value) => {
   if (!validator.isURL(value)) {
-    throw new CelebrateError('Некорректный URL');
+    throw new CelebrateError(badURLErrorText);
   }
   return value;
 };
 
 const passwordValidator = (value) => {
   if (value.match(/\s+/g)) {
-    throw new CelebrateError('Некорректный пароль');
+    throw new CelebrateError(badPasswordErrorText);
   }
   return value;
 };
