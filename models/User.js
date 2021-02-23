@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const { loginErrorText } = require('../configs/errorTexts');
+const { loginErrorText, badEmailErrorText } = require('../configs/errorTexts');
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
       validator(v) {
         return validator.isEmail(v);
       },
-      message: 'Некорректный Email',
+      message: badEmailErrorText,
     },
   },
   password: {

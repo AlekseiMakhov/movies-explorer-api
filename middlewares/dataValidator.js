@@ -26,7 +26,7 @@ module.exports.movieValidator = celebrate({
     trailer: Joi.string().custom(urlValidator).required(),
     thumbnail: Joi.string().custom(urlValidator).required(),
     owner: Joi.string().alphanum().length(24).hex(),
-    movieId: Joi.string().alphanum(),
+    movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const { badURLErrorText } = require('../configs/errorTexts');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -28,7 +29,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return validator.isURL(v);
       },
-      message: 'Некорректный URL',
+      message: badURLErrorText,
     },
     required: true,
   },
@@ -38,7 +39,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return validator.isURL(v);
       },
-      message: 'Некорректный URL',
+      message: badURLErrorText,
     },
     required: true,
   },
@@ -48,7 +49,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return validator.isURL(v);
       },
-      message: 'Некорректный URL',
+      message: badURLErrorText,
     },
     required: true,
   },
@@ -58,7 +59,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
   movieId: {
-    type: String,
+    type: Number,
     required: true,
   },
   nameRU: {

@@ -15,6 +15,7 @@ const { authorizeValidator, userValidator } = require('./middlewares/dataValidat
 const {
   PORT, MONGO_URL, MONGO_CFG, LIMITER_CFG,
 } = require('./configs/constants');
+const { pageNotFoundErrorText, serverErrorText } = require('./configs/errorTexts');
 
 const app = express();
 
@@ -32,7 +33,7 @@ app.use('/users', auth, userRouter);
 app.use('/movies', auth, moviesRouter);
 
 // Обработка запроса несуществующего адреса
-app.all('*', (req, res, next) => next(new NotFoundError('Ресурс не найден')));
+app.all('*', (req, res, next) => next(new NotFoundError(pageNotFoundErrorText)));
 
 app.use(errorLogger);
 app.use(errors());
@@ -43,7 +44,7 @@ app.use((err, req, res, next) => {
     .status(status)
     .send({
       message: status === 500
-        ? 'На сервере произошла ошибка'
+        ? serverErrorText
         : message,
     });
   next();

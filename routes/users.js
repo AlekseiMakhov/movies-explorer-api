@@ -5,6 +5,6 @@ const {
 const { userUpdateValidator } = require('../middlewares/dataValidator');
 
 router.get('/me', getCurrentUser);
-router.put('/me', userUpdateValidator, updateUser);
+router.patch('/me', userUpdateValidator, updateUser);
 
 module.exports = router;
