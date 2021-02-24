@@ -42,7 +42,7 @@ module.exports.idValidator = celebrate({
 module.exports.authorizeValidator = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().custom(passwordValidator).required().min(6),
+    password: Joi.string().custom(passwordValidator).required(),
   }),
 });
 

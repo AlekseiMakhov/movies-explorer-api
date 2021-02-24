@@ -13,6 +13,6 @@ router.use('/', auth, userRouter);
 router.use('/', auth, moviesRouter);
 
 // Обработка запроса несуществующего адреса
-router.all('*', (req, res, next) => next(new NotFoundError(pageNotFoundErrorText)));
+router.all('*', auth, (req, res, next) => next(new NotFoundError(pageNotFoundErrorText)));
 
 module.exports = router;
